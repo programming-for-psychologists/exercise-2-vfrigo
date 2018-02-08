@@ -1,0 +1,23 @@
+import time
+import sys
+import random
+from psychopy import visual,event,core,gui
+win = visual.Window([800,600],color="black", units='pix')
+names = open('names.txt', 'r').readlines()
+firstNames = [name.split(' ')[0] for name in names]
+userVar = {'Name':'Enter your name'}
+CorNameStim = visual.TextStim(win,text="Welcome!", height=40, color="white",pos=[0,0])
+def popupError(text):
+    errorDlg = gui.Dlg(title="Error", pos=(200,400))
+    errorDlg.addText('Error: '+text, color='Red')
+    errorDlg.show()
+
+while True:
+    dlg = gui.DlgFromDict(userVar)
+    if userVar['Name'] not in firstNames:
+        popupError('Name does not exist')
+    else:
+        CorNameStim.draw()
+        win.flip()
+        core.wait(3)
+        break
