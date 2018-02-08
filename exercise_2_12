@@ -1,0 +1,56 @@
+#I successfully added 4 new names to firstNames.  Unfortunately, they are "Enter your name" instead of using the user-entered name as I intended.
+
+import time
+import sys
+import random
+from psychopy import visual,event,core,gui
+names = open('names.txt', 'r').readlines()
+firstNames = [name.split(' ')[0] for name in names]
+print len(firstNames)
+#16 names in firstNames, so 15 other names (need to add 4 more)
+win = visual.Window([800,600],color="black", units='pix')
+userVar = {'Name':'Enter your name'}
+nameReceived = False
+for i in range(4):
+    firstNames.append(str(userVar['Name']))
+firstNameStim = visual.TextStim(win,text=random.choice(firstNames), height=40, color="white",pos=[0,0])
+cor = visual.TextStim(win,text="O", height=80, color="green",pos=[0,0])
+incor =visual.TextStim(win,text="X", height=80, color="red",pos=[0,0])
+crossStim = visual.TextStim(win,text="+", height=40, color="white",pos=[0,0])
+print len(firstNames)
+def popupError(text):
+    errorDlg = gui.Dlg(title="Error", pos=(200,400))
+    errorDlg.addText('Error: '+text, color='Red')
+    errorDlg.show()
+answer=event.waitKeys(maxWait=1)
+while not nameReceived:
+    dlg = gui.DlgFromDict(userVar)
+    if userVar['Name'] not in firstNames:
+        popupError('Name does not exist')
+    else:
+        print userVar['Name']
+        nameReceived = True
+while True:
+    crossStim.draw()
+    win.flip()
+    core.wait(.5)
+    win.flip()
+    nameShown = random.choice(firstNames)
+    firstNameStim.setText(nameShown)
+    firstNameStim.draw()
+    win.flip()
+    if nameShown == userVar['Name']:
+        correctResponse=['space']
+    else:
+        correctResponse=None
+    response = event.waitKeys(maxWait=1, keyList='space')
+    if response != correctResponse:
+        incor.draw()
+        win.flip()
+        core.wait(.5)
+    if response == ['space'] and correctResponse:
+        cor.draw()
+        win.flip()
+        core.wait(.5)
+    if event.getKeys(['q']):
+        break
