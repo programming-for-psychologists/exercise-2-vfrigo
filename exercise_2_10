@@ -52,7 +52,7 @@ while True:
         timer.getTime()*1000
         print timer.getTime()*1000
     React=timer.getTime()*1000
-    f.write(str(int(response==correctResponse))+'\t'+str(React)+'\n') 
+    f.write(str(int(response==correctResponse))+'\t'+ str(response) + '\t' + str(React)+'\n') 
     f.flush()
     if event.getKeys(['q']):
         f.close()
